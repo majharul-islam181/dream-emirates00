@@ -1,0 +1,1 @@
+ C:\\Flutter\\projects\\dream-emirates-demo\\.dart_tool\\flutter_build\\2cc2ff2aa84b240e696c07ca321341d1\\native_assets.yaml: 
