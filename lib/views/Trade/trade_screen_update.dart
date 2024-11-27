@@ -1,8 +1,15 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
+import 'package:dream_emirates/config/colors/colors.dart';
+import 'package:dream_emirates/config/components/internet_exception_widget.dart';
+import 'package:dream_emirates/models/activeTrade/active_trade_model.dart';
+import 'package:dream_emirates/models/completeTrade/complete_trade_model.dart';
+// import 'package:dream_emirates/models/activeTrade/active_trade_model.dart';
+import 'package:dream_emirates/models/pendingTrade/pending_trade_model.dart';
+import 'package:dream_emirates/models/vendors/vendors_model.dart';
 import 'package:flutter/material.dart';
-import 'package:dream_emirates/models/models_barrel.dart';
+// import 'package:dream_emirates/models/models_barrel.dart';
 import 'package:dream_emirates/utils/enums.dart';
 import 'package:dream_emirates/views/Trade/widgets/activetrade_card_skelton.dart';
 import 'package:flutter/services.dart';
@@ -817,13 +824,12 @@ class _TradeScreenUpdateState extends State<TradeScreenUpdate>
     );
   }
 */
+
   Widget _buildTradeCard(TradeResult trade) {
     return BlocBuilder<PriceBloc, PriceState>(
       builder: (context, priceState) {
         String buyRate = '';
         String sellRate = '';
-        print('comingggggggggggggggggggggggggggggg');
-
         if (priceState is PriceUpdated) {
           buyRate = priceState.askPrice.toString();
           sellRate = priceState.bidPrice.toString();
@@ -867,14 +873,238 @@ class _TradeScreenUpdateState extends State<TradeScreenUpdate>
     );
   }
 
+  // Widget _buildPendingTradeTab() {
+  //   // Add pending trades UI here
+  //   return const SizedBox();
+  // }
+
   Widget _buildPendingTradeTab() {
-    // Add pending trades UI here
-    return const SizedBox();
+    return BlocBuilder<PendingTradeBloc, PendingTradeState>(
+      builder: (context, state) {
+        // Directly access preloaded active trades
+        final activeTrades = state.allPendingTrade.data?.data?.result ?? [];
+
+        // Update the total PL value
+        // updateTotalPlValue(activeTrades);
+
+        // Cache active trades if the vendor ID matches
+        //   if (currentVendorId == '1') {
+        // _cacheActiveTrades(activeTrades);
+        //  }
+
+        // Render the trade cards
+        return ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: activeTrades.length,
+          itemBuilder: (context, index) {
+            return _buildPendingTradeCard(activeTrades[index]);
+          },
+        );
+      },
+    );
   }
 
+  Widget _buildPendingTradeCard(PendingTradeResult trade) {
+    return BlocBuilder<PriceBloc, PriceState>(
+      builder: (context, priceState) {
+        String buyRate = '';
+        String sellRate = '';
+        print('comingggggggggggggggggggggggggggggg');
+
+        if (priceState is PriceUpdated) {
+          buyRate = priceState.askPrice.toString();
+          sellRate = priceState.bidPrice.toString();
+        }
+
+        double executedTradeOpenRate = trade.pendingTradeTriggerRate;
+        print('executedTradeOpenRate 00: $executedTradeOpenRate');
+
+        double quantity = trade.quantity.toDouble();
+        double totalValue = executedTradeOpenRate * (quantity * 3.7462040);
+        double ttbToOZ = (quantity * 3.7462040);
+        double tradingFee = 1 * ttbToOZ;
+
+        double plValue = trade.tradeType == "BUY"
+            ? (((double.tryParse(sellRate) ?? 0.0) * ttbToOZ) - totalValue) -
+                tradingFee
+            : (totalValue - ((double.tryParse(buyRate) ?? 0.0) * ttbToOZ)) -
+                tradingFee;
+
+        double currentValue = trade.tradeType == "BUY"
+            ? ((double.tryParse(sellRate) ?? 0.0) * ttbToOZ)
+            : ((double.tryParse(buyRate) ?? 0.0) * ttbToOZ);
+
+        return TabContentAction(
+          id: trade.id,
+          metalType: trade.metalType,
+          quantity: quantity.toInt(),
+          openingRate: executedTradeOpenRate.toString(),
+          openingDate: trade.createdAt,
+          tradeType: trade.tradeType,
+          liveRate: trade.tradeType == "BUY" ? sellRate : buyRate,
+          pLvalue: plValue.toStringAsFixed(2),
+          plColor: trade.tradeType == "BUY"
+              ? AppColors.green
+              : const Color.fromARGB(255, 243, 9, 9),
+          isOpenTrade: true,
+          totalValue: totalValue.toStringAsFixed(2),
+          currentValue: currentValue.toStringAsFixed(2),
+        );
+      },
+    );
+  }
+
+/*
   Widget _buildCompleteTradeTab() {
-    // Add complete trades UI here
-    return const SizedBox();
+    return BlocBuilder<CompleteTradeBloc, CompleteTradeState>(
+      builder: (context, state) {
+        // Directly access preloaded active trades
+        final completeTrades = state.allCompleteTrade.data?.data?.result ?? [];
+        return ListView.builder(
+          padding: EdgeInsets.zero,
+          itemCount: completeTrades.length,
+          itemBuilder: (context, index) {
+            return _buildCompleteTradeCard(completeTrades[index]);
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildCompleteTradeCard(CompleteTradeResult trade) {
+    return BlocBuilder<PriceBloc, PriceState>(
+      builder: (context, priceState) {
+        String buyRate = '';
+        String sellRate = '';
+        print('comingggggggggggggggggggggggggggggg');
+
+        if (priceState is PriceUpdated) {
+          buyRate = priceState.askPrice.toString();
+          sellRate = priceState.bidPrice.toString();
+        }
+
+        double executedTradeOpenRate = trade.executedTradeOpenRate;
+        print('executedTradeOpenRate 00: $executedTradeOpenRate');
+
+        double quantity = trade.quantity.toDouble();
+        double totalValue = executedTradeOpenRate * (quantity * 3.7462040);
+        double ttbToOZ = (quantity * 3.7462040);
+        double tradingFee = 1 * ttbToOZ;
+
+        double plValue = trade.tradeType == "BUY"
+            ? (((double.tryParse(sellRate) ?? 0.0) * ttbToOZ) - totalValue) -
+                tradingFee
+            : (totalValue - ((double.tryParse(buyRate) ?? 0.0) * ttbToOZ)) -
+                tradingFee;
+
+        double currentValue = trade.tradeType == "BUY"
+            ? ((double.tryParse(sellRate) ?? 0.0) * ttbToOZ)
+            : ((double.tryParse(buyRate) ?? 0.0) * ttbToOZ);
+
+        return
+        
+         TabContentAction(
+          id: trade.id,
+          metalType: trade.metalType,
+          quantity: quantity.toInt(),
+          openingRate: executedTradeOpenRate.toString(),
+          openingDate: trade.createdAt,
+          tradeType: trade.tradeType,
+          liveRate: trade.tradeType == "BUY" ? sellRate : buyRate,
+          pLvalue: plValue.toStringAsFixed(2),
+          plColor: trade.tradeType == "BUY"
+              ? AppColors.green
+              : const Color.fromARGB(255, 243, 9, 9),
+          isOpenTrade: true,
+          totalValue: totalValue.toStringAsFixed(2),
+          currentValue: currentValue.toStringAsFixed(2),
+        );
+
+
+
+      },
+    );
+  }
+*/
+
+  Widget _buildCompleteTradeTab() {
+    return BlocBuilder<CompleteTradeBloc, CompleteTradeState>(
+      builder: (context, state) {
+        switch (state.allCompleteTrade.status) {
+          // case Status.error:
+          //   if (state.allCompleteTrade.message == "No Internet Connection") {
+          //     return InterNetExceptionWidget(
+          //       onPress: () => context.read<CompleteTradeBloc>().add(
+          //             FetchCompleteTradeEvent(vendorId: vendorId.toString()),
+          //           ),
+          //     );
+          //   }
+          //   return Center(
+          //     child:
+          //         Text(state.allCompleteTrade.message ?? "An error occurred"),
+          //   );
+
+          case Status.completed:
+            // Access completed trades directly
+            final completeTrades =
+                state.allCompleteTrade.data?.data?.result ?? [];
+
+            // Render the trade cards
+            return ListView.builder(
+              padding: EdgeInsets.zero,
+              itemCount: completeTrades.length,
+              itemBuilder: (context, index) {
+                return _buildCompleteTradeCard(completeTrades[index]);
+              },
+            );
+
+          default:
+            return const SizedBox.shrink();
+        }
+      },
+    );
+  }
+
+  Widget _buildCompleteTradeCard(CompleteTradeResult trade) {
+    return BlocBuilder<PriceBloc, PriceState>(
+      builder: (context, priceState) {
+        String buyRate = '';
+        String sellRate = '';
+
+        if (priceState is PriceUpdated) {
+          buyRate = priceState.askPrice.toString();
+          sellRate = priceState.bidPrice.toString();
+        }
+
+        double executedTradeOpenRate = trade.executedTradeOpenRate;
+        double quantity = trade.quantity.toDouble();
+        double totalValue = executedTradeOpenRate * (quantity * 3.7462040);
+        double ttbToOZ = (quantity * 3.7462040);
+        double tradingFee = 1 * ttbToOZ;
+
+        double plValue = trade.tradeType == "BUY"
+            ? (((double.tryParse(sellRate) ?? 0.0) * ttbToOZ) - totalValue) -
+                tradingFee
+            : (totalValue - ((double.tryParse(buyRate) ?? 0.0) * ttbToOZ)) -
+                tradingFee;
+
+        return TabContentAction(
+          id: trade.id,
+          metalType: trade.metalType,
+          quantity: trade.quantity,
+          openingRate: executedTradeOpenRate.toString(),
+          openingDate: trade.createdAt,
+          tradeType: trade.tradeType,
+          liveRate: trade.tradeType == "BUY" ? sellRate : buyRate,
+          pLvalue: plValue.toStringAsFixed(2),
+          plColor: trade.tradeType == "BUY"
+              ? AppColors.green
+              : const Color.fromARGB(255, 243, 9, 9),
+          isCloseTrade: true,
+          closingPl: trade.account?.amount?.toStringAsFixed(2) ?? '0.00',
+        );
+      },
+    );
   }
 
   Widget _buildErrorWidget(String message, {VoidCallback? onRetry}) {

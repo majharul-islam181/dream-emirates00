@@ -34,5 +34,6 @@ class AppStrings {
   static const String initID = "Init-ID ";
   static const String vendorId = "Id ";
   static const String profitLoss = "Profit/Loss";
+
   // Withdraw-able
 }

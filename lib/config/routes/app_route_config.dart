@@ -10,6 +10,7 @@ import 'package:dream_emirates/views/PasswordReset/password_reset_screen.dart';
 import 'package:dream_emirates/views/SignIn/signin_screen.dart';
 import 'package:dream_emirates/views/SoftEdgeBlurScreen.dart';
 import 'package:dream_emirates/views/Trade/trade_screen_update.dart';
+import 'package:dream_emirates/views/Verify/verify_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -272,23 +273,24 @@ final GoRouter router = GoRouter(
             );
           },
         ),
-        // GoRoute(
-        //   path: '/more/pdf',
-        //   name: 'pdf',
-        //   pageBuilder: (context, state) {
-        //     return CustomTransitionPage(
-        //       key: state.pageKey,
-        //       child: PdfGeneratorPage(),
-        //       transitionsBuilder:
-        //           (context, animation, secondaryAnimation, child) {
-        //         return FadeTransition(
-        //           opacity: animation,
-        //           child: child,
-        //         );
-        //       },
-        //     );
-        //   },
-        // ),
+
+        GoRoute(
+          path: '/more/kyc',
+          name: 'kyc',
+          pageBuilder: (context, state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: VerifyScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+            );
+          },
+        ),
         GoRoute(
           path: '/more/testing',
           name: 'tesing',

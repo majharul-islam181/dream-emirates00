@@ -3,6 +3,7 @@ class AppUrl {
   static String baseUserRoute = '$server/app/user';
   static String loginApi = '$baseUserRoute/auth/login';
   static String signupApi = '$baseUserRoute/auth/registration';
+  static String documentUpload = '$baseUserRoute/upload-document';
 
   static String getActiveTrades(int page, int pageSize) {
     return '$baseUserRoute/opportunity/virtual-trading/active-trades?page=$page&pageSize=$pageSize';

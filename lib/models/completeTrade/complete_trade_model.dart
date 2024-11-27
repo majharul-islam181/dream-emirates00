@@ -20,7 +20,7 @@ class CompleteTradeModel with _$CompleteTradeModel {
 @freezed
 class CompleteTradeData with _$CompleteTradeData {
   factory CompleteTradeData({
-    @Default([]) @JsonKey(name: 'result') List<TradeResult> result,
+    @Default([]) @JsonKey(name: 'result') List<CompleteTradeResult> result,
     @JsonKey(name: 'paginate') Paginate? paginate,
   }) = _CompleteTradeData;
 
@@ -29,21 +29,25 @@ class CompleteTradeData with _$CompleteTradeData {
 }
 
 @freezed
-class TradeResult with _$TradeResult {
-  factory TradeResult({
+class CompleteTradeResult with _$CompleteTradeResult {
+  factory CompleteTradeResult({
     @Default(0) @JsonKey(name: 'id') int id,
-    @Default(0.0) @JsonKey(name: 'executed_trade_open_rate') double executedTradeOpenRate,
-    @Default(0.0) @JsonKey(name: 'executed_trade_close_rate') double executedTradeCloseRate,
+    @Default(0.0)
+    @JsonKey(name: 'executed_trade_open_rate')
+    double executedTradeOpenRate,
+    @Default(0.0)
+    @JsonKey(name: 'executed_trade_close_rate')
+    double executedTradeCloseRate,
     @Default(0) @JsonKey(name: 'quantity') int quantity,
     @Default('') @JsonKey(name: 'trade_type') String tradeType,
     @Default('') @JsonKey(name: 'metal_type') String metalType,
     @Default(0.0) @JsonKey(name: 'base_metal_weight') double baseMetalWeight,
     @Default('') @JsonKey(name: 'createdAt') String createdAt,
     @JsonKey(name: 'account') Account? account,
-  }) = _TradeResult;
+  }) = _CompleteTradeResult;
 
-  factory TradeResult.fromJson(Map<String, dynamic> json) =>
-      _$TradeResultFromJson(json);
+  factory CompleteTradeResult.fromJson(Map<String, dynamic> json) =>
+      _$CompleteTradeResultFromJson(json);
 }
 
 @freezed
@@ -118,6 +122,5 @@ class Paging with _$Paging {
     @Default(0) @JsonKey(name: 'page') int page,
   }) = _Paging;
 
-  factory Paging.fromJson(Map<String, dynamic> json) =>
-      _$PagingFromJson(json);
+  factory Paging.fromJson(Map<String, dynamic> json) => _$PagingFromJson(json);
 }

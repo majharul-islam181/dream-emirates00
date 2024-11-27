@@ -170,6 +170,7 @@ class _MoreScreenState extends State<MoreScreen>
                     phoneNumber: getProfileData.phoneNumber,
                     userName: getProfileData.name,
                     account_verify: getProfileData.accountVerify,
+                    kycVerification: () => context.go('/more/kyc'),
                   );
                 default:
                   return const SizedBox.shrink();

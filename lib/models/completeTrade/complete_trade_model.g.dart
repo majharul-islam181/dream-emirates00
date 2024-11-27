@@ -28,7 +28,8 @@ _$CompleteTradeDataImpl _$$CompleteTradeDataImplFromJson(
         Map<String, dynamic> json) =>
     _$CompleteTradeDataImpl(
       result: (json['result'] as List<dynamic>?)
-              ?.map((e) => TradeResult.fromJson(e as Map<String, dynamic>))
+              ?.map((e) =>
+                  CompleteTradeResult.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       paginate: json['paginate'] == null
@@ -43,8 +44,9 @@ Map<String, dynamic> _$$CompleteTradeDataImplToJson(
       'paginate': instance.paginate,
     };
 
-_$TradeResultImpl _$$TradeResultImplFromJson(Map<String, dynamic> json) =>
-    _$TradeResultImpl(
+_$CompleteTradeResultImpl _$$CompleteTradeResultImplFromJson(
+        Map<String, dynamic> json) =>
+    _$CompleteTradeResultImpl(
       id: (json['id'] as num?)?.toInt() ?? 0,
       executedTradeOpenRate:
           (json['executed_trade_open_rate'] as num?)?.toDouble() ?? 0.0,
@@ -60,7 +62,8 @@ _$TradeResultImpl _$$TradeResultImplFromJson(Map<String, dynamic> json) =>
           : Account.fromJson(json['account'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$TradeResultImplToJson(_$TradeResultImpl instance) =>
+Map<String, dynamic> _$$CompleteTradeResultImplToJson(
+        _$CompleteTradeResultImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'executed_trade_open_rate': instance.executedTradeOpenRate,

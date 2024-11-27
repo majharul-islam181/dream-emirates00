@@ -244,7 +244,7 @@ CompleteTradeData _$CompleteTradeDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CompleteTradeData {
   @JsonKey(name: 'result')
-  List<TradeResult> get result => throw _privateConstructorUsedError;
+  List<CompleteTradeResult> get result => throw _privateConstructorUsedError;
   @JsonKey(name: 'paginate')
   Paginate? get paginate => throw _privateConstructorUsedError;
 
@@ -265,7 +265,7 @@ abstract class $CompleteTradeDataCopyWith<$Res> {
       _$CompleteTradeDataCopyWithImpl<$Res, CompleteTradeData>;
   @useResult
   $Res call(
-      {@JsonKey(name: 'result') List<TradeResult> result,
+      {@JsonKey(name: 'result') List<CompleteTradeResult> result,
       @JsonKey(name: 'paginate') Paginate? paginate});
 
   $PaginateCopyWith<$Res>? get paginate;
@@ -293,7 +293,7 @@ class _$CompleteTradeDataCopyWithImpl<$Res, $Val extends CompleteTradeData>
       result: null == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
-              as List<TradeResult>,
+              as List<CompleteTradeResult>,
       paginate: freezed == paginate
           ? _value.paginate
           : paginate // ignore: cast_nullable_to_non_nullable
@@ -325,7 +325,7 @@ abstract class _$$CompleteTradeDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: 'result') List<TradeResult> result,
+      {@JsonKey(name: 'result') List<CompleteTradeResult> result,
       @JsonKey(name: 'paginate') Paginate? paginate});
 
   @override
@@ -352,7 +352,7 @@ class __$$CompleteTradeDataImplCopyWithImpl<$Res>
       result: null == result
           ? _value._result
           : result // ignore: cast_nullable_to_non_nullable
-              as List<TradeResult>,
+              as List<CompleteTradeResult>,
       paginate: freezed == paginate
           ? _value.paginate
           : paginate // ignore: cast_nullable_to_non_nullable
@@ -365,17 +365,18 @@ class __$$CompleteTradeDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CompleteTradeDataImpl implements _CompleteTradeData {
   _$CompleteTradeDataImpl(
-      {@JsonKey(name: 'result') final List<TradeResult> result = const [],
+      {@JsonKey(name: 'result')
+      final List<CompleteTradeResult> result = const [],
       @JsonKey(name: 'paginate') this.paginate})
       : _result = result;
 
   factory _$CompleteTradeDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$CompleteTradeDataImplFromJson(json);
 
-  final List<TradeResult> _result;
+  final List<CompleteTradeResult> _result;
   @override
   @JsonKey(name: 'result')
-  List<TradeResult> get result {
+  List<CompleteTradeResult> get result {
     if (_result is EqualUnmodifiableListView) return _result;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_result);
@@ -424,7 +425,7 @@ class _$CompleteTradeDataImpl implements _CompleteTradeData {
 
 abstract class _CompleteTradeData implements CompleteTradeData {
   factory _CompleteTradeData(
-          {@JsonKey(name: 'result') final List<TradeResult> result,
+          {@JsonKey(name: 'result') final List<CompleteTradeResult> result,
           @JsonKey(name: 'paginate') final Paginate? paginate}) =
       _$CompleteTradeDataImpl;
 
@@ -433,7 +434,7 @@ abstract class _CompleteTradeData implements CompleteTradeData {
 
   @override
   @JsonKey(name: 'result')
-  List<TradeResult> get result;
+  List<CompleteTradeResult> get result;
   @override
   @JsonKey(name: 'paginate')
   Paginate? get paginate;
@@ -446,12 +447,12 @@ abstract class _CompleteTradeData implements CompleteTradeData {
       throw _privateConstructorUsedError;
 }
 
-TradeResult _$TradeResultFromJson(Map<String, dynamic> json) {
-  return _TradeResult.fromJson(json);
+CompleteTradeResult _$CompleteTradeResultFromJson(Map<String, dynamic> json) {
+  return _CompleteTradeResult.fromJson(json);
 }
 
 /// @nodoc
-mixin _$TradeResult {
+mixin _$CompleteTradeResult {
   @JsonKey(name: 'id')
   int get id => throw _privateConstructorUsedError;
   @JsonKey(name: 'executed_trade_open_rate')
@@ -471,21 +472,21 @@ mixin _$TradeResult {
   @JsonKey(name: 'account')
   Account? get account => throw _privateConstructorUsedError;
 
-  /// Serializes this TradeResult to a JSON map.
+  /// Serializes this CompleteTradeResult to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
-  /// Create a copy of TradeResult
+  /// Create a copy of CompleteTradeResult
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  $TradeResultCopyWith<TradeResult> get copyWith =>
+  $CompleteTradeResultCopyWith<CompleteTradeResult> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TradeResultCopyWith<$Res> {
-  factory $TradeResultCopyWith(
-          TradeResult value, $Res Function(TradeResult) then) =
-      _$TradeResultCopyWithImpl<$Res, TradeResult>;
+abstract class $CompleteTradeResultCopyWith<$Res> {
+  factory $CompleteTradeResultCopyWith(
+          CompleteTradeResult value, $Res Function(CompleteTradeResult) then) =
+      _$CompleteTradeResultCopyWithImpl<$Res, CompleteTradeResult>;
   @useResult
   $Res call(
       {@JsonKey(name: 'id') int id,
@@ -502,16 +503,16 @@ abstract class $TradeResultCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$TradeResultCopyWithImpl<$Res, $Val extends TradeResult>
-    implements $TradeResultCopyWith<$Res> {
-  _$TradeResultCopyWithImpl(this._value, this._then);
+class _$CompleteTradeResultCopyWithImpl<$Res, $Val extends CompleteTradeResult>
+    implements $CompleteTradeResultCopyWith<$Res> {
+  _$CompleteTradeResultCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of TradeResult
+  /// Create a copy of CompleteTradeResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -566,7 +567,7 @@ class _$TradeResultCopyWithImpl<$Res, $Val extends TradeResult>
     ) as $Val);
   }
 
-  /// Create a copy of TradeResult
+  /// Create a copy of CompleteTradeResult
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -582,11 +583,11 @@ class _$TradeResultCopyWithImpl<$Res, $Val extends TradeResult>
 }
 
 /// @nodoc
-abstract class _$$TradeResultImplCopyWith<$Res>
-    implements $TradeResultCopyWith<$Res> {
-  factory _$$TradeResultImplCopyWith(
-          _$TradeResultImpl value, $Res Function(_$TradeResultImpl) then) =
-      __$$TradeResultImplCopyWithImpl<$Res>;
+abstract class _$$CompleteTradeResultImplCopyWith<$Res>
+    implements $CompleteTradeResultCopyWith<$Res> {
+  factory _$$CompleteTradeResultImplCopyWith(_$CompleteTradeResultImpl value,
+          $Res Function(_$CompleteTradeResultImpl) then) =
+      __$$CompleteTradeResultImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -605,14 +606,14 @@ abstract class _$$TradeResultImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$TradeResultImplCopyWithImpl<$Res>
-    extends _$TradeResultCopyWithImpl<$Res, _$TradeResultImpl>
-    implements _$$TradeResultImplCopyWith<$Res> {
-  __$$TradeResultImplCopyWithImpl(
-      _$TradeResultImpl _value, $Res Function(_$TradeResultImpl) _then)
+class __$$CompleteTradeResultImplCopyWithImpl<$Res>
+    extends _$CompleteTradeResultCopyWithImpl<$Res, _$CompleteTradeResultImpl>
+    implements _$$CompleteTradeResultImplCopyWith<$Res> {
+  __$$CompleteTradeResultImplCopyWithImpl(_$CompleteTradeResultImpl _value,
+      $Res Function(_$CompleteTradeResultImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TradeResult
+  /// Create a copy of CompleteTradeResult
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -627,7 +628,7 @@ class __$$TradeResultImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? account = freezed,
   }) {
-    return _then(_$TradeResultImpl(
+    return _then(_$CompleteTradeResultImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -670,8 +671,8 @@ class __$$TradeResultImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TradeResultImpl implements _TradeResult {
-  _$TradeResultImpl(
+class _$CompleteTradeResultImpl implements _CompleteTradeResult {
+  _$CompleteTradeResultImpl(
       {@JsonKey(name: 'id') this.id = 0,
       @JsonKey(name: 'executed_trade_open_rate')
       this.executedTradeOpenRate = 0.0,
@@ -684,8 +685,8 @@ class _$TradeResultImpl implements _TradeResult {
       @JsonKey(name: 'createdAt') this.createdAt = '',
       @JsonKey(name: 'account') this.account});
 
-  factory _$TradeResultImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TradeResultImplFromJson(json);
+  factory _$CompleteTradeResultImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CompleteTradeResultImplFromJson(json);
 
   @override
   @JsonKey(name: 'id')
@@ -717,14 +718,14 @@ class _$TradeResultImpl implements _TradeResult {
 
   @override
   String toString() {
-    return 'TradeResult(id: $id, executedTradeOpenRate: $executedTradeOpenRate, executedTradeCloseRate: $executedTradeCloseRate, quantity: $quantity, tradeType: $tradeType, metalType: $metalType, baseMetalWeight: $baseMetalWeight, createdAt: $createdAt, account: $account)';
+    return 'CompleteTradeResult(id: $id, executedTradeOpenRate: $executedTradeOpenRate, executedTradeCloseRate: $executedTradeCloseRate, quantity: $quantity, tradeType: $tradeType, metalType: $metalType, baseMetalWeight: $baseMetalWeight, createdAt: $createdAt, account: $account)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TradeResultImpl &&
+            other is _$CompleteTradeResultImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.executedTradeOpenRate, executedTradeOpenRate) ||
                 other.executedTradeOpenRate == executedTradeOpenRate) &&
@@ -757,38 +758,40 @@ class _$TradeResultImpl implements _TradeResult {
       createdAt,
       account);
 
-  /// Create a copy of TradeResult
+  /// Create a copy of CompleteTradeResult
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$TradeResultImplCopyWith<_$TradeResultImpl> get copyWith =>
-      __$$TradeResultImplCopyWithImpl<_$TradeResultImpl>(this, _$identity);
+  _$$CompleteTradeResultImplCopyWith<_$CompleteTradeResultImpl> get copyWith =>
+      __$$CompleteTradeResultImplCopyWithImpl<_$CompleteTradeResultImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TradeResultImplToJson(
+    return _$$CompleteTradeResultImplToJson(
       this,
     );
   }
 }
 
-abstract class _TradeResult implements TradeResult {
-  factory _TradeResult(
-      {@JsonKey(name: 'id') final int id,
-      @JsonKey(name: 'executed_trade_open_rate')
-      final double executedTradeOpenRate,
-      @JsonKey(name: 'executed_trade_close_rate')
-      final double executedTradeCloseRate,
-      @JsonKey(name: 'quantity') final int quantity,
-      @JsonKey(name: 'trade_type') final String tradeType,
-      @JsonKey(name: 'metal_type') final String metalType,
-      @JsonKey(name: 'base_metal_weight') final double baseMetalWeight,
-      @JsonKey(name: 'createdAt') final String createdAt,
-      @JsonKey(name: 'account') final Account? account}) = _$TradeResultImpl;
+abstract class _CompleteTradeResult implements CompleteTradeResult {
+  factory _CompleteTradeResult(
+          {@JsonKey(name: 'id') final int id,
+          @JsonKey(name: 'executed_trade_open_rate')
+          final double executedTradeOpenRate,
+          @JsonKey(name: 'executed_trade_close_rate')
+          final double executedTradeCloseRate,
+          @JsonKey(name: 'quantity') final int quantity,
+          @JsonKey(name: 'trade_type') final String tradeType,
+          @JsonKey(name: 'metal_type') final String metalType,
+          @JsonKey(name: 'base_metal_weight') final double baseMetalWeight,
+          @JsonKey(name: 'createdAt') final String createdAt,
+          @JsonKey(name: 'account') final Account? account}) =
+      _$CompleteTradeResultImpl;
 
-  factory _TradeResult.fromJson(Map<String, dynamic> json) =
-      _$TradeResultImpl.fromJson;
+  factory _CompleteTradeResult.fromJson(Map<String, dynamic> json) =
+      _$CompleteTradeResultImpl.fromJson;
 
   @override
   @JsonKey(name: 'id')
@@ -818,11 +821,11 @@ abstract class _TradeResult implements TradeResult {
   @JsonKey(name: 'account')
   Account? get account;
 
-  /// Create a copy of TradeResult
+  /// Create a copy of CompleteTradeResult
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$TradeResultImplCopyWith<_$TradeResultImpl> get copyWith =>
+  _$$CompleteTradeResultImplCopyWith<_$CompleteTradeResultImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
