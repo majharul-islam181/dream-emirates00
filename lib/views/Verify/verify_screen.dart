@@ -1,534 +1,45 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:dream_emirates/config/config_barrel.dart';
 import 'package:dream_emirates/utils/string.dart';
 import 'package:dream_emirates/views/widgets/containerWidget.dart';
 import 'package:dream_emirates/views/widgets/global_text_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:http_parser/http_parser.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-/*
-class VerifyScreen extends StatefulWidget {
-  const VerifyScreen({super.key});
-
-  @override
-  State<VerifyScreen> createState() => _VerifyScreenState();
-}
-
-class _VerifyScreenState extends State<VerifyScreen> {
-  File? _frontImage;
-  File? _backImage;
-  final ImagePicker _picker = ImagePicker();
-
-  String _selectedDocumentType = 'nid'; // Default value
-  final List<String> _docTypes = [
-    'nid',
-    'id_card',
-    'driving_license',
-    'passport',
-  ];
-  final Map<String, String> documentTypeDisplay = {
-    'nid': 'NID',
-    'id_card': 'ID Card',
-    'driving_license': 'Driving License',
-    'passport': 'Passport',
-  };
-
-  /// Pick an image for front or back
-  Future<void> _pickImage(bool isFront) async {
-    final XFile? pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      setState(() {
-        if (isFront) {
-          _frontImage = File(pickedImage.path);
-        } else {
-          _backImage = File(pickedImage.path);
-        }
-      });
-    }
-  }
-
-  /// Submit data to API
-  Future<void> _submitVerification() async {
-    if (_frontImage == null || _backImage == null) {
-      _showDialog('Error', 'Please select both front and back images.');
-      return;
-    }
-
-    try {
-      final request = http.MultipartRequest(
-        'POST',
-        Uri.parse('https://your-api-endpoint.com/verify'),
-      );
-
-      request.files.add(await http.MultipartFile.fromPath(
-        'images[front]',
-        _frontImage!.path,
-      ));
-      request.files.add(await http.MultipartFile.fromPath(
-        'images[back]',
-        _backImage!.path,
-      ));
-
-      request.fields['document_type'] = _selectedDocumentType;
-
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        final responseData = await response.stream.bytesToString();
-        final jsonData = json.decode(responseData);
-        _showDialog('Success', 'Verification submitted successfully!');
-        print('API Response: $jsonData');
-      } else {
-        final errorResponse = await response.stream.bytesToString();
-        print('Error Response: $errorResponse');
-        _showDialog('Error', 'Failed to submit verification.');
-      }
-    } catch (e) {
-      print('Error: $e');
-      _showDialog('Error', 'An error occurred. Please try again.');
-    }
-  }
-
-  /// Show a dialog for success or error
-  void _showDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Verify Document'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      ContainerWidet(
-                        initialHeight: height * 0.032,
-                        initialWidth: width * 0.075,
-                        backgroundColor: Colors.black,
-                        borderRadious: 8,
-                        borderColor: Colors.transparent,
-                        borderWidth: 0,
-                        child: const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      5.w,
-                      const GlobalTextWidget(
-                        title: 'Info',
-                        fontSize: 15,
-                      )
-                    ],
-                  ),
-                  const Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      ContainerWidet(
-                        initialHeight: height * 0.032,
-                        initialWidth: width * 0.075,
-                        borderRadious: 8,
-                        backgroundColor: Colors.white,
-                        borderColor: Colors.grey,
-                        borderWidth: 2,
-                      ),
-                      5.w,
-                      const GlobalTextWidget(
-                        title: 'Pending',
-                        fontSize: 15,
-                      ),
-                      5.w,
-                    ],
-                  ),
-                ],
-              ),
-              10.h,
-              DropdownButtonFormField<String>(
-                value: _selectedDocumentType,
-                items: _docTypes.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(documentTypeDisplay[type]!),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Select Document Type',
-                  filled: true,
-                  fillColor: Color(0xFFE9EDF9),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedDocumentType = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _pickImage(true),
-                child: const Text('Select Front Image'),
-              ),
-              if (_frontImage != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Image.file(
-                    _frontImage!,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ElevatedButton(
-                onPressed: () => _pickImage(false),
-                child: const Text('Select Back Image'),
-              ),
-              if (_backImage != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Image.file(
-                    _backImage!,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitVerification,
-                child: const Text('Submit Verification'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/
-
 import 'package:image/image.dart' as img;
 import 'package:shared_preferences/shared_preferences.dart';
-/*
-class VerifyScreen extends StatefulWidget {
-  const VerifyScreen({super.key});
-
-  @override
-  State<VerifyScreen> createState() => _VerifyScreenState();
-}
-
-class _VerifyScreenState extends State<VerifyScreen> {
-  File? _frontImage;
-  File? _backImage;
-  final ImagePicker _picker = ImagePicker();
-
-  String _selectedDocumentType = 'nid'; // Default value
-  final List<String> _docTypes = [
-    'nid',
-    'id_card',
-    'driving_license',
-    'passport',
-  ];
-  final Map<String, String> documentTypeDisplay = {
-    'nid': 'NID',
-    'id_card': 'ID Card',
-    'driving_license': 'Driving License',
-    'passport': 'Passport',
-  };
-
-  /// Pick an image for front or back
-  Future<void> _pickImage(bool isFront) async {
-    final XFile? pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      File imageFile = File(pickedImage.path);
-      imageFile = await compressImage(imageFile);
-
-      setState(() {
-        if (isFront) {
-          _frontImage = imageFile;
-        } else {
-          _backImage = imageFile;
-        }
-      });
-    }
-  }
-
-  Future<File> compressImage(File file) async {
-    final image = img.decodeImage(await file.readAsBytes());
-    if (image == null) return file;
-
-    // Resize if necessary
-    final resizedImage = img.copyResize(image, width: 800);
-
-    // Compress and save to a temporary file
-    final compressed =
-        File('${file.parent.path}/compressed_${file.path.split('/').last}');
-    compressed.writeAsBytesSync(img.encodeJpg(resizedImage, quality: 75));
-    return compressed;
-  }
-
-  /// Submit the front and back image data to API
-  Future<void> _submitVerification() async {
-    if (_frontImage == null || _backImage == null) {
-      _showDialog('Error', 'Please select both front and back images.');
-      return;
-    }
-
-    try {
-      await _uploadImage(
-        _frontImage!,
-        'document', // Example value for documentType
-        'front', // Example value for imageType
-      );
-      await _uploadImage(
-        _backImage!,
-        'document', // Example value for documentType
-        'back', // Example value for imageType
-      );
-      _showDialog('Success', 'Verification submitted successfully!');
-    } catch (e) {
-      print('Error: $e');
-      _showDialog('Error', 'An error occurred. Please try again : $e.');
-    }
-  }
-
-  Future<void> _uploadImage(
-      File image, String documentType, String imageType) async {
-    const String apiUrl =
-        "https://staging.karnaphulijewellery.com/api/app/user/upload-document";
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? myToken = prefs.getString('token');
-
-    if (myToken == null || myToken.isEmpty) {
-      throw Exception('Authorization token is missing.');
-    }
-
-    try {
-      final request = http.MultipartRequest('POST', Uri.parse(apiUrl))
-        ..headers['Authorization'] = 'Bearer $myToken' // Ensure correct format
-        ..files.add(await http.MultipartFile.fromPath('images', image.path))
-        ..fields['document_type'] = documentType
-        ..fields['image_type'] = imageType;
-
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        print('Upload Successful: ${await response.stream.bytesToString()}');
-      } else {
-        final errorResponse = await response.stream.bytesToString();
-        print('Error Response: $errorResponse');
-        throw Exception('Failed to upload $imageType image: $errorResponse');
-      }
-    } catch (e) {
-      print('Error uploading $imageType image: $e');
-      throw Exception('Failed to upload $imageType image.');
-    }
-  }
-
-  /// Show a dialog for success or error
-  void _showDialog(String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Verify Document'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: height * 0.035,
-                        width: width * 0.075,
-                        decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Info',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                  const Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        height: height * 0.035,
-                        width: width * 0.075,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey, width: 2),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Pending',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: _selectedDocumentType,
-                items: _docTypes.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(documentTypeDisplay[type]!),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Select Document Type',
-                  filled: true,
-                  fillColor: Color(0xFFE9EDF9),
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedDocumentType = value!;
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => _pickImage(true),
-                child: const Text('Select Front Image'),
-              ),
-              if (_frontImage != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Image.file(
-                    _frontImage!,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ElevatedButton(
-                onPressed: () => _pickImage(false),
-                child: const Text('Select Back Image'),
-              ),
-              if (_backImage != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Image.file(
-                    _backImage!,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _submitVerification,
-                child: const Text('Submit Verification'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/
 
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as img;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:mime/mime.dart'; // For determining MIME type of files
-import 'package:mime/mime.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
+import 'package:http_parser/http_parser.dart';
 
-class VerifyScreen extends StatefulWidget {
-  const VerifyScreen({super.key});
+class DocumentVerificationScreen extends StatefulWidget {
+  const DocumentVerificationScreen({super.key});
 
   @override
-  State<VerifyScreen> createState() => _VerifyScreenState();
+  _DocumentVerificationScreenState createState() =>
+      _DocumentVerificationScreenState();
 }
 
-class _VerifyScreenState extends State<VerifyScreen> {
-  File? _frontImage; // Stores the selected front image
-  File? _backImage; // Stores the selected back image
-  final ImagePicker _picker = ImagePicker(); // Image picker instance
+class _DocumentVerificationScreenState
+    extends State<DocumentVerificationScreen> {
+  File? _frontImage;
+  File? _backImage;
+  // final String _selectedDocumentType = 'Passport'; // Example document type
+  final ImagePicker _picker = ImagePicker();
+  bool _isLoading = false; // Flag to manage loading state
 
-  // Document type dropdown values
   String _selectedDocumentType = 'nid'; // Default value
   final List<String> _docTypes = [
     'nid',
@@ -536,8 +47,6 @@ class _VerifyScreenState extends State<VerifyScreen> {
     'driving_license',
     'passport',
   ];
-
-  // Map to display user-friendly names for document types
   final Map<String, String> documentTypeDisplay = {
     'nid': 'NID',
     'id_card': 'ID Card',
@@ -545,79 +54,137 @@ class _VerifyScreenState extends State<VerifyScreen> {
     'passport': 'Passport',
   };
 
-  /// Picks an image from the gallery and optionally compresses it
-  Future<void> _pickImage(bool isFront) async {
-    final XFile? pickedImage =
-        await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      File imageFile = File(pickedImage.path);
+  /// Function to select and convert an image to JPG
+  Future<void> _selectFrontImage() async {
+    try {
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-      // Compress the image to optimize size before uploading
-      imageFile = await compressImage(imageFile);
+      if (pickedFile == null) {
+        print("No image selected.");
+        return;
+      }
+
+      final selectedImage = File(pickedFile.path);
+
+      // Convert image to JPG
+      final convertedImage = await _convertToJpg(selectedImage);
 
       setState(() {
-        if (isFront) {
-          _frontImage = imageFile;
-        } else {
-          _backImage = imageFile;
-        }
+        _frontImage = convertedImage;
       });
+    } catch (e) {
+      print("Error selecting image: $e");
+      _showDialog(
+          'Error', 'Failed to process the front image. Please try again.');
     }
   }
 
-  /// Compress the image to reduce file size
-  Future<File> compressImage(File file) async {
-    final image = img.decodeImage(await file.readAsBytes());
-    if (image == null) throw Exception('Unable to decode image file.');
+  Future<void> _selectBackImage() async {
+    try {
+      final pickedFile2 = await _picker.pickImage(source: ImageSource.gallery);
 
-    // Resize and compress
-    final resizedImage = img.copyResize(image, width: 800);
+      if (pickedFile2 == null) {
+        print("No image selected.");
+        return;
+      }
 
-    // Save with correct format
-    final compressedPath =
-        '${file.parent.path}/compressed_${file.uri.pathSegments.last}';
-    final compressedFile = File(compressedPath);
+      final selectedImage2 = File(pickedFile2.path);
 
-    compressedFile.writeAsBytesSync(img.encodeJpg(resizedImage, quality: 75));
-    return compressedFile;
+      // Convert image to JPG
+      final convertedImage2 = await _convertToJpg(selectedImage2);
+
+      setState(() {
+        _backImage = convertedImage2;
+      });
+    } catch (e) {
+      print("Error selecting image: $e");
+      _showDialog(
+          'Error', 'Failed to process the back image. Please try again.');
+    }
   }
 
-  /// Submits the verification data by uploading front and back images
+  /// Convert and compress the image file to JPG format
+  Future<File> _convertToJpg(File imageFile) async {
+    try {
+      final originalImage = img.decodeImage(imageFile.readAsBytesSync());
+
+      if (originalImage == null) {
+        throw Exception("Failed to decode the image file.");
+      }
+
+      // Compress the image by resizing it (e.g., 1024x1024 max dimensions)
+      final resizedImage = img.copyResize(
+        originalImage,
+        width: 1024,
+        height: 1024,
+      );
+
+      // Encode the resized image to JPG with a quality of 70 (for compression)
+      final compressedImage = img.encodeJpg(resizedImage, quality: 70);
+
+      // Save the compressed image to a temporary file
+      final tempDir = await getTemporaryDirectory();
+      final tempFilePath =
+          "${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}_compressed.jpg";
+
+      print("Compressed image path: $tempFilePath");
+
+      final compressedFile = File(tempFilePath)
+        ..writeAsBytesSync(compressedImage);
+
+      return compressedFile;
+    } catch (e) {
+      print("Error compressing the image: $e");
+      rethrow;
+    }
+  }
+
+  /// Submit the front image for verification
   Future<void> _submitVerification() async {
-    if (_frontImage == null || _backImage == null) {
-      _showDialog('Error', 'Please select both front and back images.');
-      return;
+    if (_frontImage == null) {
+      throw Exception('Please select a front image.');
     }
 
     try {
-      // Upload the front image
       await _uploadImage(
-        _frontImage!,
-        _selectedDocumentType,
-        'front',
+        image: _frontImage!,
+        documentType: _selectedDocumentType,
+        imageType: 'front',
       );
-
-      // Upload the back image
-      await _uploadImage(
-        _backImage!,
-        _selectedDocumentType,
-        'back',
-      );
-
-      // If both uploads are successful, show a success dialog
-      _showDialog('Success', 'Verification submitted successfully!');
+      print('Front image uploaded successfully.');
     } catch (e) {
-      // Handle errors and show an error dialog
-      print('Error: $e');
-      _showDialog('Error', 'An error occurred. Please try again: $e.');
+      print('Error in front image upload: $e');
+      rethrow; // Propagate the error
     }
   }
 
-  /// Uploads an image to the API
-  Future<void> _uploadImage(
-      File image, String documentType, String imageType) async {
-    const String apiUrl =
-        "https://staging.karnaphulijewellery.com/api/app/user/upload-document";
+  /// Submit the back image for verification
+  Future<void> _submitVerification02() async {
+    if (_backImage == null) {
+      throw Exception('Please select a back image.');
+    }
+
+    try {
+      await _uploadImage(
+        image: _backImage!,
+        documentType: _selectedDocumentType,
+        imageType: 'back',
+      );
+      print('Back image uploaded successfully.');
+    } catch (e) {
+      print('Error in back image upload: $e');
+      rethrow; // Propagate the error
+    }
+  }
+
+  /// Upload an image to the API
+  Future<void> _uploadImage({
+    required File image,
+    required String documentType,
+    required String imageType,
+  }) async {
+    final url = Uri.parse(
+        "https://staging.karnaphulijewellery.com/api/app/user/upload-document");
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? myToken = prefs.getString('token');
@@ -626,194 +193,194 @@ class _VerifyScreenState extends State<VerifyScreen> {
       throw Exception('Authorization token is missing.');
     }
 
-    // Validate MIME type
-    validateMimeType(image);
+    final request = http.MultipartRequest('POST', url)
+      ..headers['Authorization'] = 'Bearer $myToken'
+      ..fields['document_type'] = documentType.toLowerCase()
+      ..fields['image_type'] = imageType
+      ..files.add(
+        http.MultipartFile(
+          'images',
+          image.readAsBytes().asStream(),
+          image.lengthSync(),
+          filename: image.path.split('/').last,
+          contentType: MediaType('image', 'jpeg'),
+        ),
+      );
 
-    try {
-      // Multipart request setup
-      final request = http.MultipartRequest('POST', Uri.parse(apiUrl))
-        ..headers['Authorization'] = 'Bearer $myToken'
-        ..files.add(await http.MultipartFile.fromPath(
-            'image', image.path)) // Adjust key as per API
-        ..fields['document_type'] = documentType
-        ..fields['image_type'] = imageType;
+    print("Uploading $imageType image...");
+    final response = await request.send();
+    final responseBody = await response.stream.bytesToString();
+    print("Response Body: $responseBody");
 
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        final responseData = await response.stream.bytesToString();
-        print('Upload Successful: $responseData');
-      } else {
-        final errorResponse = await response.stream.bytesToString();
-        print('Error Response: $errorResponse');
-        throw Exception('Failed to upload $imageType image: $errorResponse');
-      }
-    } catch (e) {
-      print('Error uploading $imageType image: $e');
-      throw Exception('Failed to upload $imageType image.');
+    if (response.statusCode != 200) {
+      throw Exception("Failed to upload $imageType image: $responseBody");
     }
   }
 
-  /// Shows a dialog with a title and message
+  Future<void> _submitBothVerifications() async {
+    setState(() {
+      _isLoading = true; // Start loading
+    });
+
+    try {
+      await _submitVerification();
+      await _submitVerification02();
+      _showDialog('Success', 'Both verifications submitted successfully!');
+    } catch (e) {
+      _showDialog('Error', 'An error occurred: $e');
+    } finally {
+      setState(() {
+        _isLoading = false; // Stop loading
+      });
+    }
+  }
+
+  /// Show dialog for messages
   void _showDialog(String title, String message) {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
+      builder: (ctx) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+              context.go('/home');
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Verify Document'),
+        title: const Text('Document Verification'),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // Step indicator UI
-              Row(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: height * 0.035,
-                        width: width * 0.075,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<String>(
+                      value: _selectedDocumentType,
+                      items: _docTypes.map((type) {
+                        return DropdownMenuItem(
+                          value: type,
+                          child: Text(documentTypeDisplay[type]!),
+                        );
+                      }).toList(),
+                      decoration: const InputDecoration(
+                        labelText: 'Select Document Type',
+                        filled: true,
+                        fillColor: Color(0xFFE9EDF9),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDocumentType = value!;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: _selectFrontImage,
+                      child: _frontImage == null
+                          ? Container(
+                              height: 200,
+                              width: double.infinity,
+                              color: Colors.grey[300],
+                              child: const Center(
+                                  child: Text('Tap to select Front Image')),
+                            )
+                          : Container(
+                              height: 200,
+                              width: double.infinity,
+                              color: Colors.grey[300],
+                              child: Center(
+                                  child: Image.file(
+                                _frontImage!,
+                                height: 190,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ))),
+                    ),
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: _selectBackImage,
+                      child: _backImage == null
+                          ? Container(
+                              height: 200,
+                              width: double.infinity,
+                              color: Colors.grey[300],
+                              child: const Center(
+                                  child: Text('Tap to select Back Image')),
+                            )
+                          : Container(
+                              height: 200,
+                              width: double.infinity,
+                              color: Colors.grey[300],
+                              child: Center(
+                                  child: Image.file(
+                                _backImage!,
+                                height: 190,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ))),
+                    ),
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: _isLoading
+                          ? null // Disable button when loading
+                          : _submitBothVerifications,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12.0, horizontal: 16.0),
                         decoration: BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.circular(10),
+                          color: _isLoading ? Colors.grey : Colors.black,
+                          borderRadius: BorderRadius.circular(12.0),
+                          border: Border.all(
+                            color: const Color(0xFFE8EDF1),
+                          ),
                         ),
-                        child: const Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 20,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Submit',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Info',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                  const Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.0),
-                      child: Divider(
-                        thickness: 0.5,
-                        color: Colors.grey,
                       ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Container(
-                        height: height * 0.035,
-                        width: width * 0.075,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey, width: 2),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Text(
-                        'Pending',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-
-              // Dropdown for document type selection
-              DropdownButtonFormField<String>(
-                value: _selectedDocumentType,
-                items: _docTypes.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(documentTypeDisplay[type]!),
-                  );
-                }).toList(),
-                decoration: const InputDecoration(
-                  labelText: 'Select Document Type',
-                  filled: true,
-                  fillColor: Color(0xFFE9EDF9),
+                  ],
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _selectedDocumentType = value!;
-                  });
-                },
               ),
-              const SizedBox(height: 20),
-
-              // Front image selection
-              ElevatedButton(
-                onPressed: () => _pickImage(true),
-                child: const Text('Select Front Image'),
-              ),
-              if (_frontImage != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Image.file(
-                    _frontImage!,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-              // Back image selection
-              ElevatedButton(
-                onPressed: () => _pickImage(false),
-                child: const Text('Select Back Image'),
-              ),
-              if (_backImage != null)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Image.file(
-                    _backImage!,
-                    height: 150,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              const SizedBox(height: 20),
-
-              // Submit button
-              ElevatedButton(
-                onPressed: _submitVerification,
-                child: const Text('Submit Verification'),
-              ),
-            ],
+            ),
           ),
-        ),
+          if (_isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: const Center(
+                child: SizedBox(
+                  height: 25,
+                  child: CupertinoActivityIndicator(
+                    color: Colors.pink,
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
-  }
-
-  void validateMimeType(File file) {
-    final mimeType = lookupMimeType(file.path);
-    if (mimeType == null || !mimeType.startsWith('image/')) {
-      throw Exception('Invalid file type. Only images are allowed.');
-    }
   }
 }

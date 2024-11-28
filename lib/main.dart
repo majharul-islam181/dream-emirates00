@@ -196,6 +196,7 @@ class MyApp extends StatelessWidget {
     ));
     return MultiBlocProvider(
       providers: [
+        /*
         BlocProvider<UserProfileBloc>(create: (_) => getIt<UserProfileBloc>()),
         BlocProvider<VendorsAccountBloc>(
             create: (_) => getIt<VendorsAccountBloc>()),
@@ -205,12 +206,21 @@ class MyApp extends StatelessWidget {
         BlocProvider<SignupBloc>(
           create: (_) => getIt<SignupBloc>(),
         ),
+*/
 
-        // BlocProvider<ActiveTradeBloc>(create: (_) => getIt<ActiveTradeBloc>()),
-        // BlocProvider<PendingTradeBloc>(
-        //     create: (_) => getIt<PendingTradeBloc>()),
-        // BlocProvider<CompleteTradeBloc>(
-        //     create: (_) => getIt<CompleteTradeBloc>()),
+        BlocProvider<UserProfileBloc>(
+            create: (_) => GetIt.instance<UserProfileBloc>()),
+        BlocProvider<VendorsAccountBloc>(
+            create: (_) => GetIt.instance<VendorsAccountBloc>()),
+        BlocProvider<BalanceCubit>(
+            create: (_) => GetIt.instance<BalanceCubit>()),
+        BlocProvider<PriceBloc>(create: (_) => GetIt.instance<PriceBloc>()),
+        BlocProvider<ActiveTradeBloc>(
+            create: (_) => GetIt.instance<ActiveTradeBloc>()),
+        BlocProvider<PendingTradeBloc>(
+            create: (_) => GetIt.instance<PendingTradeBloc>()),
+        BlocProvider<CompleteTradeBloc>(
+            create: (_) => GetIt.instance<CompleteTradeBloc>()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
