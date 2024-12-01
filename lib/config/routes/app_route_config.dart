@@ -160,6 +160,36 @@ final GoRouter router = GoRouter(
         // ),
 
         GoRoute(
+  path: '/trades',
+  name: 'trades',
+  pageBuilder: (context, state) {
+    final String dashboardVendorId =
+        state.pathParameters['dashboardVendorId'] ?? '0';
+    final String selectedAccountIndexStr =
+        state.pathParameters['selectedAccountIndex'] ?? '0';
+
+    // Ensure selectedAccountIndex is a valid integer
+    final int selectedAccountIndex = int.tryParse(selectedAccountIndexStr) ?? 0;
+
+    // Return the page with safe parameters
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: TradeScreenUpdate(
+        dashboardVendorId: dashboardVendorId,
+        selectedAccountIndex: selectedAccountIndex,
+      ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
+  },
+),
+
+/*
+        GoRoute(
           path: '/trades',
           name: 'trades',
           pageBuilder: (context, state) {
@@ -167,6 +197,8 @@ final GoRouter router = GoRouter(
                 state.pathParameters['dashboardVendorId'] ?? '0';
             final String selectedAccountIndex =
                 state.pathParameters['selectedAccountIndex'] ?? '0';
+
+                
 
             return CustomTransitionPage(
               key: state.pageKey,
@@ -184,6 +216,9 @@ final GoRouter router = GoRouter(
             );
           },
         ),
+
+
+*/
         // GoRoute(
         //   path: '/trades',
         //   name: 'trades',

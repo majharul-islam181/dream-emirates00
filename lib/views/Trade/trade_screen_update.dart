@@ -25,7 +25,7 @@ class TradeScreenUpdate extends StatefulWidget {
     required this.dashboardVendorId,
     required this.selectedAccountIndex,
   });
-  String dashboardVendorId = '3';
+  String dashboardVendorId;
   int selectedAccountIndex;
 
   @override
@@ -539,19 +539,73 @@ class _TradeScreenUpdateState extends State<TradeScreenUpdate>
   final StreamController<double> _plValueStreamController =
       StreamController<double>.broadcast();
 
+       // Add a subscription for priceBloc updates
+  StreamSubscription? priceBlocSubscription;
+
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 3, vsync: this);
     priceBloc = GetIt.instance<PriceBloc>();
-
-    // currentVendorId = widget.dashboardVendorId.isEmpty
-    //     ? '1' // Default to Vendor 1 if no ID is passed
-    //     : widget.dashboardVendorId;
-
+    
     _loadCachedVendorData();
     _loadCachedActiveTrades();
+    _fetchActiveTrades();
   }
+
+
+//   void _fetchActiveTrades() {
+//   final vendorId = widget.dashboardVendorId == '0' || widget.dashboardVendorId.isEmpty
+//       ? cachedAccountNames[widget.selectedAccountIndex]
+//       : widget.dashboardVendorId;
+
+//   // Dispatch the event to fetch active trades
+//   context.read<ActiveTradeBloc>().add(FetchActiveTradeEvent(vendorId: vendorId));
+// }
+// void _fetchActiveTrades() {
+//   // Ensure cachedAccountNames is not empty and selectedAccountIndex is within bounds
+//   if (cachedAccountNames.isNotEmpty && widget.selectedAccountIndex < cachedAccountNames.length) {
+//     final vendorId = widget.dashboardVendorId == '0' || widget.dashboardVendorId.isEmpty
+//         ? cachedAccountNames[widget.selectedAccountIndex]
+//         : widget.dashboardVendorId;
+
+//     // Dispatch the event to fetch active trades
+//     context.read<ActiveTradeBloc>().add(FetchActiveTradeEvent(vendorId: vendorId));
+//   } else {
+//     // Handle the case where the list is empty or index is out of range
+//     print("Error: cachedAccountNames is empty or selectedAccountIndex is out of range");
+//     // You can handle this error by showing an alert or using a default vendor ID if required
+//   }
+// }
+void _fetchActiveTrades() {
+  // Ensure cachedAccountNames is not empty and selectedAccountIndex is within bounds
+  if (cachedAccountNames.isNotEmpty && widget.selectedAccountIndex < cachedAccountNames.length) {
+    final vendorId = widget.dashboardVendorId == '0' || widget.dashboardVendorId.isEmpty
+        ? cachedAccountNames[widget.selectedAccountIndex]
+        : widget.dashboardVendorId;
+
+    // Dispatch the event to fetch active trades
+    context.read<ActiveTradeBloc>().add(FetchActiveTradeEvent(vendorId: vendorId));
+  } else {
+    // Handle the case where the list is empty or index is out of range
+    print("Error: cachedAccountNames is empty or selectedAccountIndex is out of range");
+    // Optionally, you can provide a default vendor ID
+    context.read<ActiveTradeBloc>().add(FetchActiveTradeEvent(vendorId: 'defaultVendorId'));
+  }
+}
+
+
+@override
+void didUpdateWidget(covariant TradeScreenUpdate oldWidget) {
+  super.didUpdateWidget(oldWidget);
+
+  // Only fetch active trades if the vendorId or selectedAccountIndex has changed
+  if (oldWidget.dashboardVendorId != widget.dashboardVendorId ||
+      oldWidget.selectedAccountIndex != widget.selectedAccountIndex) {
+    _fetchActiveTrades();
+  }
+}
+
 
   @override
   void dispose() {
@@ -644,6 +698,8 @@ class _TradeScreenUpdateState extends State<TradeScreenUpdate>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+
+          
             BlocBuilder<VendorsAccountBloc, VendorsAccountState>(
               builder: (context, state) {
                 List<Company>? allAccountList;
@@ -706,6 +762,9 @@ class _TradeScreenUpdateState extends State<TradeScreenUpdate>
               },
             ),
 
+
+
+
             ///
             ///
             ///
@@ -729,7 +788,8 @@ class _TradeScreenUpdateState extends State<TradeScreenUpdate>
 
   ///
   ///
-
+  ///
+/*
   Widget _buildActiveTradeTab() {
     return BlocBuilder<ActiveTradeBloc, ActiveTradeState>(
       builder: (context, state) {
@@ -755,77 +815,7 @@ class _TradeScreenUpdateState extends State<TradeScreenUpdate>
       },
     );
   }
-
-/* 
-  Widget _buildActiveTradeTab() {
-    return BlocBuilder<ActiveTradeBloc, ActiveTradeState>(
-      builder: (context, state) {
-        if (state.allActiveTrade.status == Status.completed) {
-          final activeTrades = state.allActiveTrade.data!.data!.result;
-          //_cacheActiveTrades(activeTrades);
-          updateTotalPlValue(activeTrades);
-
-          // Cache the fetched data only if the vendor ID matches
-          if (currentVendorId == '1') {
-            // _cacheActiveTrades(activeTrades);
-          }
-
-          return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: activeTrades.length,
-            itemBuilder: (context, index) {
-              return _buildTradeCard(activeTrades[index]);
-            },
-          );
-        }
-        return const Center(child: Text("No Active Trades Available"));
-
-/*
-        if (cachedActiveTrades.isNotEmpty && currentVendorId == '1') {
-          // Use cached/preloaded data
-          updateTotalPlValue(cachedActiveTrades);
-          return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: cachedActiveTrades.length,
-            itemBuilder: (context, index) {
-              return _buildTradeCard(cachedActiveTrades[index]);
-            },
-          );
-        } else {
-          // Fallback in case preloaded data isn't available
-          return BlocBuilder<ActiveTradeBloc, ActiveTradeState>(
-            builder: (context, state) {
-              if (state.allActiveTrade.status == Status.completed) {
-                final activeTrades = state.allActiveTrade.data!.data!.result;
-                //_cacheActiveTrades(activeTrades);
-                updateTotalPlValue(activeTrades);
-
-                // Cache the fetched data only if the vendor ID matches
-                if (currentVendorId == '1') {
-                  _cacheActiveTrades(activeTrades);
-                }
-
-                return ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: activeTrades.length,
-                  itemBuilder: (context, index) {
-                    return _buildTradeCard(activeTrades[index]);
-                  },
-                );
-              }
-              return const Center(child: Text("No Active Trades Available"));
-            },
-          );
-        }
-
-
-        */
-      },
-    );
-  }
-*/
-
-  Widget _buildTradeCard(TradeResult trade) {
+ Widget _buildTradeCard(TradeResult trade) {
     return BlocBuilder<PriceBloc, PriceState>(
       builder: (context, priceState) {
         String buyRate = '';
@@ -872,11 +862,122 @@ class _TradeScreenUpdateState extends State<TradeScreenUpdate>
       },
     );
   }
+*/
 
-  // Widget _buildPendingTradeTab() {
-  //   // Add pending trades UI here
-  //   return const SizedBox();
-  // }
+
+
+Widget _buildActiveTradeTab() {
+  return BlocBuilder<ActiveTradeBloc, ActiveTradeState>(
+    builder: (context, state) {
+      // Extract active trades and handle null safely
+      final activeTrades = state.allActiveTrade.data?.data?.result ?? [];
+
+      // Update the total PL value
+      updateTotalPlValue(activeTrades);
+
+      // Cache trades if required (e.g., vendor check)
+     // if (state.shouldCacheTrades) {
+        _cacheActiveTrades(activeTrades);
+    //  }
+
+      // Render trade cards in a ListView
+      return ListView.builder(
+        padding: EdgeInsets.zero,
+        itemCount: activeTrades.length,
+        itemBuilder: (context, index) {
+          return _buildTradeCard(activeTrades[index]);
+        },
+      );
+    },
+  );
+}
+
+
+Widget _buildTradeCard(TradeResult trade) {
+  return BlocBuilder<PriceBloc, PriceState>(
+    builder: (context, priceState) {
+      final buyRate = (priceState is PriceUpdated) ? priceState.askPrice.toString() : '';
+      final sellRate = (priceState is PriceUpdated) ? priceState.bidPrice.toString() : '';
+
+      // Calculate values using helper functions
+      final plValue = _calculatePLValue(
+        trade.tradeType,
+        buyRate,
+        sellRate,
+        trade.executedTradeOpenRate,
+        trade.quantity.toDouble(),
+      );
+
+      final currentValue = _calculateCurrentValue(
+        trade.tradeType,
+        buyRate,
+        sellRate,
+        trade.quantity.toDouble(),
+      );
+
+      final totalValue = trade.executedTradeOpenRate * (trade.quantity * 3.7462040);
+
+      return TabContentAction(
+        id: trade.id,
+        metalType: trade.metalType,
+        quantity: trade.quantity,
+        openingRate: trade.executedTradeOpenRate.toString(),
+        openingDate: trade.createdAt,
+        tradeType: trade.tradeType,
+        liveRate: trade.tradeType == "BUY" ? sellRate : buyRate,
+        pLvalue: plValue.toStringAsFixed(2),
+        plColor: trade.tradeType == "BUY"
+            ? AppColors.green
+            : const Color.fromARGB(255, 243, 9, 9),
+        isOpenTrade: true,
+        totalValue: totalValue.toStringAsFixed(2),
+        currentValue: currentValue.toStringAsFixed(2),
+      );
+    },
+  );
+}
+
+// Helper Function to Calculate PL Value
+double _calculatePLValue(
+  String tradeType,
+  String buyRate,
+  String sellRate,
+  double executedTradeOpenRate,
+  double quantity,
+) {
+  final ttbToOZ = quantity * 3.7462040;
+  final tradingFee = 1 * ttbToOZ;
+  final totalValue = executedTradeOpenRate * ttbToOZ;
+
+  if (tradeType == "BUY") {
+    return (((double.tryParse(sellRate) ?? 0.0) * ttbToOZ) - totalValue) - tradingFee;
+  } else {
+    return (totalValue - ((double.tryParse(buyRate) ?? 0.0) * ttbToOZ)) - tradingFee;
+  }
+}
+
+// Helper Function to Calculate Current Value
+double _calculateCurrentValue(
+  String tradeType,
+  String buyRate,
+  String sellRate,
+  double quantity,
+) {
+  final ttbToOZ = quantity * 3.7462040;
+
+  return tradeType == "BUY"
+      ? ((double.tryParse(sellRate) ?? 0.0) * ttbToOZ)
+      : ((double.tryParse(buyRate) ?? 0.0) * ttbToOZ);
+}
+
+
+///
+///
+///
+///
+///
+
+
 
   Widget _buildPendingTradeTab() {
     return BlocBuilder<PendingTradeBloc, PendingTradeState>(

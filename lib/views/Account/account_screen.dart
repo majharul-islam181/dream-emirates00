@@ -130,7 +130,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Timer? _throttle;
-
+/*
   void _connectWebSocket() {
     channel.stream.listen((message) {
       if (_throttle == null || !_throttle!.isActive) {
@@ -165,6 +165,61 @@ class _AccountScreenState extends State<AccountScreen> {
       }
     });
   }
+*/
+
+void _connectWebSocket() {
+  channel.stream.listen((message) {
+    if (_throttle == null || !_throttle!.isActive) {
+      _throttle = Timer(const Duration(seconds: 1), () {
+        if (!mounted) return; // Ensure widget is still in the tree
+        
+        Map<String, dynamic> getData = jsonDecode(message);
+
+        setState(() {
+          double newAskPrice = (getData['askPrice'] is int)
+              ? (getData['askPrice'] as int).toDouble()
+              : (getData['askPrice'] as double);
+
+          askPrice = newAskPrice;
+          bidPrice = (getData['bidPrice'] is int)
+              ? (getData['bidPrice'] as int).toDouble()
+              : (getData['bidPrice'] as double);
+
+          DateTime now = DateTime.now();
+          chartData.add(ChartData(now, askPrice));
+
+          DateTime cutoff = now.subtract(const Duration(minutes: 30));
+          chartData.removeWhere((data) => data.time.isBefore(cutoff));
+
+          minPrice = chartData.fold(double.infinity,
+              (prev, element) => element.value < prev ? element.value : prev);
+          maxPrice = chartData.fold(double.negativeInfinity,
+              (prev, element) => element.value > prev ? element.value : prev);
+        });
+      });
+    }
+  });
+}
+
+
+  @override
+void dispose() {
+  // Cancel WebSocket channel
+  channel.sink.close();
+  
+  // Cancel the Timer if active
+  _throttle?.cancel();
+
+  // Dispose Blocs if necessary
+  userProfileBloc.close();
+  vendorsAccountBloc.close();
+  // activeTradeBloc.close();
+  // pendingTradeBloc.close();
+  // completeTradeBloc.close();
+
+  super.dispose();
+}
+
 
   @override
   Widget build(BuildContext context) {

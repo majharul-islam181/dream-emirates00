@@ -206,7 +206,7 @@ class MyApp extends StatelessWidget {
           create: (_) => getIt<SignupBloc>(),
         ),
 
-        // BlocProvider<ActiveTradeBloc>(create: (_) => getIt<ActiveTradeBloc>()),
+        BlocProvider<ActiveTradeBloc>(create: (_) => getIt<ActiveTradeBloc>()),
         // BlocProvider<PendingTradeBloc>(
         //     create: (_) => getIt<PendingTradeBloc>()),
         // BlocProvider<CompleteTradeBloc>(

@@ -7,7 +7,6 @@ import 'package:dream_emirates/views/PasswordReset/password_reset_screen.dart';
 import 'package:dream_emirates/views/SignIn/widgets/widgets.dart';
 import 'package:dream_emirates/views/Signin/widgets/forgot_password_button.dart';
 import 'package:dream_emirates/views/SignupScreen/signup_screen.dart';
-import 'package:dream_emirates/views/SignupScreen/widgets/signup_button.dart';
 import 'package:dream_emirates/views/widgets/global_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

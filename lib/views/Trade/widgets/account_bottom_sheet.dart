@@ -197,7 +197,10 @@ class _AccountBottomSheetState extends State<AccountBottomSheet> {
                     if (widget.onAccountTap != null) {
                       widget.onAccountTap!(account);
                     }
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
+                    if (Navigator.canPop(context)) {
+                      Navigator.pop(context);
+                    }
                   },
                   child: AccountCardBottom(
                     isClicked: selectedAccountIndex == index,
