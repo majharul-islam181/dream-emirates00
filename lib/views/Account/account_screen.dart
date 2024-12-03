@@ -345,28 +345,29 @@ void dispose() {
 
                                 print('vendor id my: $vendorId ');
 
-                                GetIt.instance<ActiveTradeBloc>().add(
-                                  FetchActiveTradeEvent(
-                                      vendorId: vendorId.toString()),
-                                );
+                                // GetIt.instance<ActiveTradeBloc>().add(
+                                //   FetchActiveTradeEvent(
+                                //       vendorId: vendorId.toString()),
+                                // );
 
-                                GetIt.instance<PendingTradeBloc>().add(
-                                  FetchPendingTradeEvent(
-                                      vendorId: vendorId.toString()),
-                                );
-                                GetIt.instance<CompleteTradeBloc>().add(
-                                  FetchCompleteTradeEvent(
-                                      vendorId: vendorId.toString()),
-                                );
-                                // context.read<ActiveTradeBloc>().add(
-                                //     FetchActiveTradeEvent(
-                                //         vendorId: vendorId.toString()));
-                                // context.read<PendingTradeBloc>().add(
-                                //     FetchPendingTradeEvent(
-                                //         vendorId: vendorId.toString()));
-                                // context.read<CompleteTradeBloc>().add(
-                                //     FetchCompleteTradeEvent(
-                                //         vendorId: vendorId.toString()));
+                                // GetIt.instance<PendingTradeBloc>().add(
+                                //   FetchPendingTradeEvent(
+                                //       vendorId: vendorId.toString()),
+                                // );
+                                // GetIt.instance<CompleteTradeBloc>().add(
+                                //   FetchCompleteTradeEvent(
+                                //       vendorId: vendorId.toString()),
+                                // );
+
+                                context.read<ActiveTradeBloc>().add(
+                                    FetchActiveTradeEvent(
+                                        vendorId: vendorId.toString()));
+                                context.read<PendingTradeBloc>().add(
+                                    FetchPendingTradeEvent(
+                                        vendorId: vendorId.toString()));
+                                context.read<CompleteTradeBloc>().add(
+                                    FetchCompleteTradeEvent(
+                                        vendorId: vendorId.toString()));
 
                                 // activeTradeBloc.add(FetchActiveTradeEvent(
                                 //     vendorId: vendorId.toString()));
