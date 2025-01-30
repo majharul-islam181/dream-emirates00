@@ -1,5 +1,4 @@
 // price_state.dart
-import 'package:dream_emirates/data/response/api_response.dart';
 
 abstract class PriceState {}
 

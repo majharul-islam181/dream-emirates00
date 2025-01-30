@@ -1,4 +1,3 @@
-import 'package:dream_emirates/bloc/login_bloc/login_bloc.dart';
 import 'package:dream_emirates/bloc/signup_bloc/signup_bloc.dart';
 import 'package:dream_emirates/config/colors/colors.dart';
 import 'package:dream_emirates/config/extension/spaceWidthExtension.dart';

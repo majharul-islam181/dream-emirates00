@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'package:dream_emirates/views/Dashboard/dashboard_screen.dart';
-import 'package:dream_emirates/views/Navbar/navbar.dart';
-import 'package:dream_emirates/views/Signin/signin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../session_manager/session_controller.dart';

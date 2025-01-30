@@ -1,12 +1,9 @@
-import 'package:flutter/foundation.dart';
+// ignore_for_file: unused_field
+
 import 'package:flutter/material.dart';
 
 import 'package:dream_emirates/bloc/login_bloc/login_bloc.dart';
 import 'package:dream_emirates/main.dart';
-import 'package:dream_emirates/utils/string.dart';
-import 'package:dream_emirates/views/SignIn/widgets/widgets.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PasswordResetScreen extends StatefulWidget {
   const PasswordResetScreen({super.key});

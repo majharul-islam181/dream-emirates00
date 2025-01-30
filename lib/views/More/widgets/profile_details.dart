@@ -1,13 +1,8 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, non_constant_identifier_names
 
 import 'package:dream_emirates/bloc/balance_bloc/balance_cubit.dart';
-import 'package:dream_emirates/config/colors/colors.dart';
-import 'package:dream_emirates/config/extension/spaceWidthExtension.dart';
-import 'package:dream_emirates/utils/string.dart';
-import 'package:dream_emirates/views/More/widgets/action_button_widget.dart';
 import 'package:dream_emirates/views/widgets/containerWidget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../../widgets/global_text_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

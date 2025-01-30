@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:dream_emirates/config/app_url.dart';
 import 'package:dream_emirates/data/network/network_services_api.dart';
 import 'package:dream_emirates/models/getUserBalance/get_user_balance_model.dart';

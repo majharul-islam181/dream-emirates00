@@ -1,6 +1,4 @@
-import 'package:dream_emirates/bloc/login_bloc/login_bloc.dart';
 import 'package:dream_emirates/bloc/signup_bloc/signup_bloc.dart';
-import 'package:dream_emirates/utils/string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

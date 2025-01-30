@@ -1,8 +1,7 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, unused_import
 
 import 'dart:convert';
 
-import 'package:dream_emirates/bloc/balance_bloc/balance_cubit.dart';
 import 'package:dream_emirates/bloc/login_bloc/login_bloc.dart';
 import 'package:dream_emirates/bloc/signup_bloc/signup_bloc.dart';
 import 'package:dream_emirates/config/components/flutter_error.dart';
@@ -16,9 +15,9 @@ import 'package:dream_emirates/services/session_manager/session_controller.dart'
 import 'package:dream_emirates/utils/enums.dart';
 import 'package:dream_emirates/views/Account/account_screen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'bloc/bloc_barrel.dart';
@@ -108,9 +107,6 @@ void servicesLocator() {
 */
 
 // main.dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 GetIt getIt = GetIt.instance;
@@ -208,11 +204,24 @@ class MyApp extends StatelessWidget {
         ),
 */
 
-        // BlocProvider<ActiveTradeBloc>(create: (_) => getIt<ActiveTradeBloc>()),
+        BlocProvider<ActiveTradeBloc>(create: (_) => getIt<ActiveTradeBloc>()),
         // BlocProvider<PendingTradeBloc>(
         //     create: (_) => getIt<PendingTradeBloc>()),
         // BlocProvider<CompleteTradeBloc>(
         //     create: (_) => getIt<CompleteTradeBloc>()),
+        BlocProvider<UserProfileBloc>(
+            create: (_) => GetIt.instance<UserProfileBloc>()),
+        BlocProvider<VendorsAccountBloc>(
+            create: (_) => GetIt.instance<VendorsAccountBloc>()),
+        BlocProvider<BalanceCubit>(
+            create: (_) => GetIt.instance<BalanceCubit>()),
+        BlocProvider<PriceBloc>(create: (_) => GetIt.instance<PriceBloc>()),
+        BlocProvider<ActiveTradeBloc>(
+            create: (_) => GetIt.instance<ActiveTradeBloc>()),
+        BlocProvider<PendingTradeBloc>(
+            create: (_) => GetIt.instance<PendingTradeBloc>()),
+        BlocProvider<CompleteTradeBloc>(
+            create: (_) => GetIt.instance<CompleteTradeBloc>()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
@@ -340,7 +349,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> preloadData() async {
     try {
       // Log when each state is completed
-      print("Preloading data...");
+      if (kDebugMode) {
+        print("Preloading data...");
+      }
 
       // await fetchChartData();
 
@@ -348,44 +359,58 @@ class _SplashScreenState extends State<SplashScreen> {
       await Future.wait([
         userProfileBloc.stream.firstWhere(
           (state) {
-            print("User Profile State: ${state.getUserProfileData.status}");
+            if (kDebugMode) {
+              print("User Profile State: ${state.getUserProfileData.status}");
+            }
             return state.getUserProfileData.status == Status.completed;
           },
         ),
         vendorsAccountBloc.stream.firstWhere(
           (state) {
-            print("Vendor Account State: ${state.allVendorAccountList.status}");
+            if (kDebugMode) {
+              print("Vendor Account State: ${state.allVendorAccountList.status}");
+            }
             return state.allVendorAccountList.status == Status.completed;
           },
         ),
         balanceCubit.stream.firstWhere(
           (state) {
-            print("Balance State: $state");
+            if (kDebugMode) {
+              print("Balance State: $state");
+            }
             return state is BalanceState;
           },
         ),
         activeTradeBloc.stream.firstWhere(
           (state) {
-            print("active Account State: ${state.allActiveTrade.status}");
+            if (kDebugMode) {
+              print("active Account State: ${state.allActiveTrade.status}");
+            }
             return state.allActiveTrade.status == Status.completed;
           },
         ),
         pendingTradeBloc.stream.firstWhere(
           (state) {
-            print("pending Account State: ${state.allPendingTrade.status}");
+            if (kDebugMode) {
+              print("pending Account State: ${state.allPendingTrade.status}");
+            }
             return state.allPendingTrade.status == Status.completed;
           },
         ),
         completeTradeBloc.stream.firstWhere(
           (state) {
-            print("complete Account State: ${state.allCompleteTrade.status}");
+            if (kDebugMode) {
+              print("complete Account State: ${state.allCompleteTrade.status}");
+            }
             return state.allCompleteTrade.status == Status.completed;
           },
         ),
       ]).timeout(
         const Duration(seconds: 3),
         onTimeout: () {
-          print("Data loading timed out.");
+          if (kDebugMode) {
+            print("Data loading timed out.");
+          }
           return []; // Return an empty list to satisfy the expected return type
         },
       );
@@ -395,7 +420,9 @@ class _SplashScreenState extends State<SplashScreen> {
         context.go('/home');
       }
     } catch (e) {
-      print("Error during data loading: $e");
+      if (kDebugMode) {
+        print("Error during data loading: $e");
+      }
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Error loading data: $e")),

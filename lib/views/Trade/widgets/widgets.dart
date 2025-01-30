@@ -10,4 +10,3 @@ export 'package:dream_emirates/views/Trade/widgets/p_l_widget.dart';
 export 'package:dream_emirates/views/Trade/widgets/trade_card_widget.dart';
 export 'package:dream_emirates/views/Trade/widgets/app_bar_widget.dart';
 export 'package:dream_emirates/views/Trade/widgets/tab_content_action.dart';
-export 'package:dream_emirates/views/Trade/widgets/account_bottom_sheet.dart';

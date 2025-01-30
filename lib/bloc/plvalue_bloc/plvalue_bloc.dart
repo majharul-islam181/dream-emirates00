@@ -1,4 +1,6 @@
 // trade_bloc.dart
+// ignore_for_file: override_on_non_overriding_member
+
 import 'package:bloc/bloc.dart';
 import 'plvalue_event.dart';
 import 'plvalue_state.dart';

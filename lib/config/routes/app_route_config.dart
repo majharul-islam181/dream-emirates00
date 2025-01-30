@@ -86,37 +86,37 @@ final GoRouter router = GoRouter(
             );
           },
         ),
+/*
+        GoRoute(
+          path: '/home',
+          name: 'home',
+          pageBuilder: (context, state) {
+            return CustomTransitionPage(
+              key: state.pageKey,
+              child: const DashboardScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                // Add a smooth curve to the animation
+                final curvedAnimation = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeInOut, // Smooth and fluid transition
+                );
 
-        // GoRoute(
-        //   path: '/home',
-        //   name: 'home',
-        //   pageBuilder: (context, state) {
-        //     return CustomTransitionPage(
-        //       key: state.pageKey,
-        //       child: const DashboardScreen(),
-        //       transitionsBuilder:
-        //           (context, animation, secondaryAnimation, child) {
-        //         // Add a smooth curve to the animation
-        //         final curvedAnimation = CurvedAnimation(
-        //           parent: animation,
-        //           curve: Curves.easeInOut, // Smooth and fluid transition
-        //         );
+                // Slide Animation: From left to right
+                final slideAnimation = Tween<Offset>(
+                  begin: const Offset(-1.0, 0.0), // Starts from the left
+                  end: Offset.zero, // Ends at its normal position
+                ).animate(curvedAnimation);
 
-        //         // Slide Animation: From left to right
-        //         final slideAnimation = Tween<Offset>(
-        //           begin: const Offset(-1.0, 0.0), // Starts from the left
-        //           end: Offset.zero, // Ends at its normal position
-        //         ).animate(curvedAnimation);
-
-        //         return SlideTransition(
-        //           position: slideAnimation,
-        //           child: child,
-        //         );
-        //       },
-        //     );
-        //   },
-        // ),
-
+                return SlideTransition(
+                  position: slideAnimation,
+                  child: child,
+                );
+              },
+            );
+          },
+        ),
+*/
         GoRoute(
           path: '/account',
           name: 'account',
@@ -164,7 +164,7 @@ final GoRouter router = GoRouter(
   name: 'trades',
   pageBuilder: (context, state) {
     final String dashboardVendorId =
-        state.pathParameters['dashboardVendorId'] ?? '0';
+        state.pathParameters['dashboardVendorId'] ?? '1';
     final String selectedAccountIndexStr =
         state.pathParameters['selectedAccountIndex'] ?? '0';
 

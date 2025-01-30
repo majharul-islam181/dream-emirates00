@@ -2,12 +2,10 @@
 
 import 'package:dream_emirates/bloc/balance_bloc/balance_cubit.dart';
 import 'package:dream_emirates/config/colors/colors.dart';
-import 'package:dream_emirates/config/extension/spaceWidthExtension.dart';
 import 'package:dream_emirates/utils/string.dart';
 import 'package:dream_emirates/views/widgets/containerWidget.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/global_text_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart'; // Adjust this import based on your file structure
 
 class CurrentBalanceWidget extends StatelessWidget {

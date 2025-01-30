@@ -1,7 +1,6 @@
 import 'package:dream_emirates/config/colors/colors.dart';
 import 'package:dream_emirates/config/extension/spaceWidthExtension.dart';
 import 'package:dream_emirates/views/More/widgets/const_title_widget.dart';
-import 'package:dream_emirates/views/Trade/widgets/account_bottom_sheet.dart';
 import 'package:dream_emirates/views/widgets/containerWidget.dart';
 import 'package:dream_emirates/views/widgets/global_text_widget.dart';
 import 'package:flutter/cupertino.dart';
@@ -353,8 +352,6 @@ class _StatementScreenState extends State<StatementScreen>
 }
 */
 
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 class StatementScreen extends StatefulWidget {

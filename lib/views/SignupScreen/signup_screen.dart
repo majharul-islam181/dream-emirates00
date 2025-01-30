@@ -1,22 +1,11 @@
 // ignore_for_file: unused_field
 
-import 'package:dream_emirates/bloc/signup_bloc/signup_bloc.dart';
 import 'package:dream_emirates/config/config_barrel.dart';
-import 'package:dream_emirates/main.dart';
 import 'package:dream_emirates/utils/string.dart';
 import 'package:dream_emirates/views/SignIn/widgets/background_widget.dart';
-import 'package:dream_emirates/views/SignupScreen/widgets/confrim_password_signup.dart';
-import 'package:dream_emirates/views/SignupScreen/widgets/dateofBirth_widget.dart';
-import 'package:dream_emirates/views/SignupScreen/widgets/email_addess_signup.dart';
-import 'package:dream_emirates/views/SignupScreen/widgets/full_name_widget.dart';
-import 'package:dream_emirates/views/SignupScreen/widgets/password_widget.dart';
-import 'package:dream_emirates/views/SignupScreen/widgets/phone_number_signup.dart';
-import 'package:dream_emirates/views/SignupScreen/widgets/signup_button.dart';
 import 'package:dream_emirates/views/widgets/global_text_widget.dart';
-import 'package:dream_emirates/views/widgets/introTextWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_country_code_picker/fl_country_code_picker.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 /*
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

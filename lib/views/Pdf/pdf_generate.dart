@@ -1,21 +1,11 @@
-import 'dart:ffi';
 import 'dart:io';
-import 'package:dream_emirates/bloc/statement/statement_bloc.dart';
 import 'package:dream_emirates/config/colors/colors.dart';
-import 'package:dream_emirates/config/components/loading_widget.dart';
 import 'package:dream_emirates/config/extension/spaceWidthExtension.dart';
-import 'package:dream_emirates/main.dart';
-import 'package:dream_emirates/utils/enums.dart';
-import 'package:dream_emirates/views/Pdf/label_row.dart';
 import 'package:dream_emirates/views/widgets/global_text_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 
 // class ActiveTrade {

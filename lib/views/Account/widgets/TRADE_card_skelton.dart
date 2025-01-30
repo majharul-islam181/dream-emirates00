@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:dream_emirates/config/extension/spaceWidthExtension.dart';
-import 'package:dream_emirates/main.dart';
 import 'package:dream_emirates/views/widgets/containerWidget.dart';
 import 'package:flutter/material.dart';
 

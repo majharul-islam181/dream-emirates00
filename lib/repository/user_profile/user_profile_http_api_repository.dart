@@ -2,7 +2,6 @@ import 'package:dream_emirates/config/app_url.dart';
 import 'package:dream_emirates/data/network/network_services_api.dart';
 import 'package:dream_emirates/models/user_profile/user_profile_model.dart';
 import 'package:dream_emirates/repository/user_profile/user_profile_repository.dart';
-import 'package:dream_emirates/utils/constant.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfileHttpApiRepository extends UserProfileRepository {

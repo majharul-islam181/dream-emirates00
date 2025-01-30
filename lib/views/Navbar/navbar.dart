@@ -1,7 +1,5 @@
 import 'package:dream_emirates/config/colors/colors.dart';
 import 'package:dream_emirates/views/Account/account_screen.dart';
-import 'package:dream_emirates/views/Trade/trade_screen_update.dart';
-import 'package:dream_emirates/views/testing.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';

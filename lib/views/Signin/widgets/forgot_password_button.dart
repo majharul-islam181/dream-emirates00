@@ -1,4 +1,3 @@
-import 'package:dream_emirates/config/config_barrel.dart';
 import 'package:dream_emirates/utils/string.dart';
 import 'package:dream_emirates/views/widgets/global_text_widget.dart';
 import 'package:flutter/material.dart';

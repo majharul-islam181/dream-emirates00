@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field
+// ignore_for_file: unused_field, unused_import
 import 'package:dream_emirates/config/app_url.dart';
 import 'package:dream_emirates/data/network/network_services_api.dart';
 import 'package:dream_emirates/models/pendingTrade/pending_trade_model.dart';
